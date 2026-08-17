@@ -1,0 +1,14 @@
+{
+    "name": "remote-checkout",
+    "version": "1.0.0",
+    "scripts": {
+      "start": "webpack serve"
+    },
+    "dependencies": {
+      "@module-federation/enhanced": "^0.8.0",
+      "webpack": "^5.90.0",
+      "webpack-cli": "^5.1.0",
+      "webpack-dev-server": "^5.0.0"
+    }
+  }
+  

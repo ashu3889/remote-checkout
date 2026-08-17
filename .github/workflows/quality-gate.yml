@@ -1,0 +1,63 @@
+name: Shared Platform Quality Gate
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-compliance-and-performance:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Pull down the developer's new PR branch code from remote-checkout
+      - name: Checkout Pull Request Code
+        uses: actions/checkout@v4
+        with:
+          path: 'remote-checkout'
+
+      # 2. Pull down the unchangeable scripts from your governance repo
+      - name: Load Governance Assets
+        uses: actions/checkout@v4
+        with:
+          repository: '${{ github.repository_owner }}/ui-common-tokens'
+          token: ${{ secrets.PLATFORM_CI_TOKEN }}
+          path: 'ui-common-tokens'
+
+      # 3. Pull down the host application shell frame
+      - name: Load Main Web Frame
+        uses: actions/checkout@v4
+        with:
+          repository: '${{ github.repository_owner }}/host-shell'
+          token: ${{ secrets.PLATFORM_CI_TOKEN }}
+          path: 'host-shell'
+
+      # 4. Set up Node.js on the cloud machine
+      - name: Initialize Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 5. Boot the PR micro frontend module server dynamically on Port 3001
+      - name: Run Remote Checkout Application
+        run: |
+          cd remote-checkout
+          npm ci
+          npx webpack serve &
+        env:
+          NODE_ENV: production
+
+      # 6. Boot the main web shell framework server on Port 3000
+      - name: Run Platform Host Application
+        run: |
+          cd host-shell
+          npm ci
+          npx webpack serve &
+        env:
+          NODE_ENV: production
+
+      # 7. Execute the unchangeable platform guardrail code
+      - name: Process Quality Verification Engine
+        run: |
+          cd ui-common-tokens
+          npm install @lhci/cli
+          node pipeline-guardrail.js
