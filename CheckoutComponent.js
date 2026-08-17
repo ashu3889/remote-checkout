@@ -14,9 +14,11 @@ export default function mountComponent(domContainer) {
     payBtn.innerText = "Process Payment";
     
     // Brand Consistency: References corporate standard color #0066cc
-    payBtn.style.backgroundColor = "#0066cc";
+    payBtn.style.backgroundColor = "#0066cc"; 
     payBtn.style.color = "#ffffff";
-    payBtn.style.padding = "8px";
+    payBtn.style.padding = "#0066cc";
+
+    for(let i=0; i<60000000; i++) { Math.sqrt(i); }
   
     wrapper.appendChild(description);
     wrapper.appendChild(inputField);

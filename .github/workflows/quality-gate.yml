@@ -41,7 +41,7 @@ jobs:
       - name: Run Remote Checkout Application
         run: |
           cd remote-checkout
-          npm ci
+          npm install # 👈 CHANGED HERE to generate dependencies dynamically
           npx webpack serve &
         env:
           NODE_ENV: production
@@ -50,7 +50,7 @@ jobs:
       - name: Run Platform Host Application
         run: |
           cd host-shell
-          npm ci
+          npm install # 👈 CHANGED HERE to generate dependencies dynamically
           npx webpack serve &
         env:
           NODE_ENV: production
